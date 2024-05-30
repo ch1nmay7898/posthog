@@ -69,3 +69,4 @@ BILLING_SERVICE_URL = get_from_env("BILLING_SERVICE_URL", "https://billing.posth
 ADMIN_PORTAL_ENABLED = get_from_env("ADMIN_PORTAL_ENABLED", DEMO or DEBUG, type_cast=str_to_bool)
 
 ASSET_GENERATION_MAX_TIMEOUT_MINUTES = get_from_env("ASSET_GENERATION_MAX_TIMEOUT_MINUTES", 10, type_cast=int)
+SESSION_COOKIE_SECURE = True
