@@ -15,6 +15,7 @@ from ee.settings import BILLING_SERVICE_URL
 from posthog.cloud_utils import get_cached_instance_license
 from posthog.models import Organization
 from posthog.models.organization import OrganizationMembership, OrganizationUsageInfo
+from security import safe_requests
 
 logger = structlog.get_logger(__name__)
 
@@ -124,8 +125,7 @@ class BillingManager:
             capture_exception(e)
 
     def deactivate_products(self, organization: Organization, products: str) -> None:
-        res = requests.get(
-            f"{BILLING_SERVICE_URL}/api/billing/deactivate?products={products}",
+        res = safe_requests.get(f"{BILLING_SERVICE_URL}/api/billing/deactivate?products={products}",
             headers=self.get_auth_headers(organization),
         )
 
@@ -171,8 +171,7 @@ class BillingManager:
         if not self.license:  # mypy
             raise Exception("No license found")
 
-        res = requests.get(
-            f"{BILLING_SERVICE_URL}/api/billing",
+        res = safe_requests.get(f"{BILLING_SERVICE_URL}/api/billing",
             headers=self.get_auth_headers(organization),
         )
 
@@ -189,8 +188,7 @@ class BillingManager:
         if not self.license:  # mypy
             raise Exception("No license found")
 
-        res = requests.get(
-            f"{BILLING_SERVICE_URL}/api/billing/portal",
+        res = safe_requests.get(f"{BILLING_SERVICE_URL}/api/billing/portal",
             headers=self.get_auth_headers(organization),
         )
 
@@ -207,8 +205,7 @@ class BillingManager:
         if self.license and organization:
             headers = self.get_auth_headers(organization)
 
-        res = requests.get(
-            f"{BILLING_SERVICE_URL}/api/products-v2",
+        res = safe_requests.get(f"{BILLING_SERVICE_URL}/api/products-v2",
             params=params,
             headers=headers,
         )
