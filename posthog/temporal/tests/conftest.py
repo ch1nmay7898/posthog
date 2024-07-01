@@ -1,5 +1,4 @@
 import asyncio
-import random
 
 import pytest
 import pytest_asyncio
@@ -11,12 +10,13 @@ from temporalio.testing import ActivityEnvironment
 from posthog.models import Organization, Team
 from posthog.temporal.batch_exports.clickhouse import ClickHouseClient
 from posthog.temporal.common.client import connect
+import secrets
 
 
 @pytest.fixture
 def organization():
     """A test organization."""
-    name = f"BatchExportsTestOrg-{random.randint(1, 99999)}"
+    name = f"BatchExportsTestOrg-{secrets.SystemRandom().randint(1, 99999)}"
     org = Organization.objects.create(name=name)
     org.save()
 
@@ -28,7 +28,7 @@ def organization():
 @pytest.fixture
 def team(organization):
     """A test team."""
-    name = f"BatchExportsTestTeam-{random.randint(1, 99999)}"
+    name = f"BatchExportsTestTeam-{secrets.SystemRandom().randint(1, 99999)}"
     team = Team.objects.create(organization=organization, name=name)
     team.save()
 
@@ -39,7 +39,7 @@ def team(organization):
 
 @pytest_asyncio.fixture
 async def aorganization():
-    name = f"BatchExportsTestOrg-{random.randint(1, 99999)}"
+    name = f"BatchExportsTestOrg-{secrets.SystemRandom().randint(1, 99999)}"
     org = await sync_to_async(Organization.objects.create)(name=name)  # type: ignore
 
     yield org
@@ -49,7 +49,7 @@ async def aorganization():
 
 @pytest_asyncio.fixture
 async def ateam(aorganization):
-    name = f"BatchExportsTestTeam-{random.randint(1, 99999)}"
+    name = f"BatchExportsTestTeam-{secrets.SystemRandom().randint(1, 99999)}"
     team = await sync_to_async(Team.objects.create)(organization=aorganization, name=name)  # type: ignore
 
     yield team
