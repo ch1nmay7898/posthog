@@ -149,7 +149,7 @@ class BillingViewset(viewsets.GenericViewSet):
         res = requests.get(
             f"{BILLING_SERVICE_URL}/api/billing",
             headers=BillingManager(license).get_auth_headers(organization),
-        )
+        timeout=60)
 
         if res.status_code != 200:
             raise ValidationError(
