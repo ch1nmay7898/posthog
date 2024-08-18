@@ -472,7 +472,7 @@ def test_slack_webhook(request):
     try:
         if not settings.DEBUG:
             raise_if_user_provided_url_unsafe(webhook)
-        response = requests.post(webhook, verify=False, json=message)
+        response = requests.post(webhook, verify=True, json=message)
 
         if response.ok:
             return JsonResponse({"success": True})
