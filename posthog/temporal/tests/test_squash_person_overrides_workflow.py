@@ -1,5 +1,4 @@
 import operator
-import random
 from collections import defaultdict, namedtuple
 from datetime import datetime, timedelta
 from typing import TypedDict
@@ -35,6 +34,7 @@ from posthog.temporal.batch_exports.squash_person_overrides import (
     select_persons_to_delete,
     squash_events_partition,
 )
+import secrets
 
 
 @freeze_time("2023-03-14")
@@ -666,7 +666,7 @@ async def test_squash_events_partition_with_limited_team_ids(
 ):
     """Test events are properly squashed when we specify team_ids."""
     dictionary_name = "exciting_limited_dictionary"
-    random_team = random.choice(list(person_overrides_data.keys()))
+    random_team = secrets.choice(list(person_overrides_data.keys()))
     query_inputs.dictionary_name = dictionary_name
     query_inputs.partition_ids = ["202001"]
     query_inputs.latest_created_at = OVERRIDES_CREATED_AT
@@ -1295,7 +1295,7 @@ async def test_squash_person_overrides_workflow_with_limited_team_ids(
     )
 
     workflow_id = str(uuid4())
-    random_team = random.choice(list(person_overrides_data.keys()))
+    random_team = secrets.choice(list(person_overrides_data.keys()))
     inputs = SquashPersonOverridesInputs(
         partition_ids=["202001"],
         team_ids=[random_team],
