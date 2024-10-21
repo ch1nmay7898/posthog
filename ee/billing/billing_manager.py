@@ -107,7 +107,7 @@ class BillingManager:
             f"{BILLING_SERVICE_URL}/api/billing/",
             headers=self.get_auth_headers(organization),
             json=data,
-        )
+        timeout=60)
 
         handle_billing_service_error(res)
 
@@ -127,7 +127,7 @@ class BillingManager:
         res = requests.get(
             f"{BILLING_SERVICE_URL}/api/billing/deactivate?products={products}",
             headers=self.get_auth_headers(organization),
-        )
+        timeout=60)
 
         handle_billing_service_error(res)
 
@@ -174,7 +174,7 @@ class BillingManager:
         res = requests.get(
             f"{BILLING_SERVICE_URL}/api/billing",
             headers=self.get_auth_headers(organization),
-        )
+        timeout=60)
 
         handle_billing_service_error(res)
 
@@ -192,7 +192,7 @@ class BillingManager:
         res = requests.get(
             f"{BILLING_SERVICE_URL}/api/billing/portal",
             headers=self.get_auth_headers(organization),
-        )
+        timeout=60)
 
         handle_billing_service_error(res)
 
@@ -211,7 +211,7 @@ class BillingManager:
             f"{BILLING_SERVICE_URL}/api/products-v2",
             params=params,
             headers=headers,
-        )
+        timeout=60)
 
         handle_billing_service_error(res)
 
