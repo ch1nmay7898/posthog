@@ -5,7 +5,6 @@ import functools
 import gzip
 import json
 import os
-from random import randint
 from unittest import mock
 from uuid import uuid4
 
@@ -44,6 +43,7 @@ from posthog.temporal.tests.utils.models import (
     adelete_batch_export,
     afetch_batch_export_runs,
 )
+import secrets
 
 pytestmark = [pytest.mark.asyncio, pytest.mark.django_db]
 
@@ -226,7 +226,7 @@ async def test_insert_into_s3_activity_puts_data_into_s3(
 
     # Generate a random team id integer. There's still a chance of a collision,
     # but it's very small.
-    team_id = randint(1, 1000000)
+    team_id = secrets.SystemRandom().randint(1, 1000000)
 
     (events, _, _) = await generate_test_events_in_clickhouse(
         client=clickhouse_client,

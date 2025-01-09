@@ -1,4 +1,3 @@
-import random
 from datetime import timedelta
 from time import sleep
 
@@ -15,6 +14,7 @@ from posthog.constants import GROUP_TYPES_LIMIT
 from posthog.models.event.sql import EVENTS_DATA_TABLE
 from posthog.settings import CLICKHOUSE_DATABASE
 from posthog.test.base import BaseTest, ClickhouseTestMixin, _create_event
+import secrets
 
 EVENTS_TABLE_DEFAULT_MATERIALIZED_COLUMNS = [f"$group_{i}" for i in range(GROUP_TYPES_LIMIT)] + [
     "$session_id",
@@ -85,7 +85,7 @@ class TestMaterializedColumns(ClickhouseTestMixin, BaseTest):
             )
 
     def test_materialized_column_naming(self):
-        random.seed(0)
+        secrets.SystemRandom().seed(0)
 
         materialize("events", "$foO();--sqlinject", create_minmax_index=True)
         materialize("events", "$foO();ääsqlinject", create_minmax_index=True)

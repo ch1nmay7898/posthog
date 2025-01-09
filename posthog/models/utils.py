@@ -3,7 +3,7 @@ import string
 import uuid
 from collections import defaultdict, namedtuple
 from contextlib import contextmanager
-from random import Random, choice
+from random import Random
 from time import time
 from typing import Any, Callable, Dict, Iterator, Optional, Set, Type, TypeVar
 
@@ -184,7 +184,7 @@ class LowercaseSlugField(models.SlugField):
 
 def generate_random_short_suffix():
     """Return a 4 letter suffix made up random ASCII letters, useful for disambiguation of duplicates."""
-    return "".join(choice(string.ascii_letters) for _ in range(4))
+    return "".join(secrets.choice(string.ascii_letters) for _ in range(4))
 
 
 def create_with_slug(create_func: Callable[..., T], default_slug: str = "", *args, **kwargs) -> T:

@@ -1,4 +1,3 @@
-import random
 from unittest.mock import ANY, patch
 
 from django.core import mail
@@ -11,6 +10,7 @@ from posthog.models.organization import (
     OrganizationMembership,
 )
 from posthog.test.base import APIBaseTest
+import secrets
 
 NAME_SEEDS = ["John", "Jane", "Alice", "Bob", ""]
 
@@ -22,7 +22,7 @@ class TestOrganizationInvitesAPI(APIBaseTest):
         for i in range(0, count):
             payload.append(
                 {
-                    "target_email": f"test+{random.randint(1000000, 9999999)}@posthog.com",
+                    "target_email": f"test+{secrets.SystemRandom().randint(1000000, 9999999)}@posthog.com",
                     "first_name": NAME_SEEDS[i % len(NAME_SEEDS)],
                 }
             )

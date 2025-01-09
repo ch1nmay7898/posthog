@@ -1,12 +1,12 @@
 """Test utilities that deal with test event generation."""
 import datetime as dt
 import json
-import random
 import typing
 import uuid
 
 from posthog.temporal.batch_exports.clickhouse import ClickHouseClient
 from posthog.temporal.tests.utils.datetimes import date_range
+import secrets
 
 
 class EventValues(typing.TypedDict):
@@ -45,7 +45,7 @@ def generate_test_events(
     set_once: dict | None = None,
 ):
     """Generate a list of events for testing."""
-    _timestamp = random.choice(possible_datetimes)
+    _timestamp = secrets.choice(possible_datetimes)
 
     if inserted_at == "_timestamp":
         inserted_at_value = _timestamp.strftime("%Y-%m-%d %H:%M:%S.%f")
@@ -59,7 +59,7 @@ def generate_test_events(
     events: list[EventValues] = [
         {
             "_timestamp": _timestamp.strftime("%Y-%m-%d %H:%M:%S"),
-            "created_at": random.choice(possible_datetimes).strftime("%Y-%m-%d %H:%M:%S.%f"),
+            "created_at": secrets.choice(possible_datetimes).strftime("%Y-%m-%d %H:%M:%S.%f"),
             "distinct_id": str(uuid.uuid4()),
             "elements": json.dumps("css selectors;"),
             "elements_chain": "css selectors;",
@@ -69,7 +69,7 @@ def generate_test_events(
             "person_properties": person_properties,
             "properties": properties,
             "team_id": team_id,
-            "timestamp": random.choice(possible_datetimes).strftime("%Y-%m-%d %H:%M:%S.%f"),
+            "timestamp": secrets.choice(possible_datetimes).strftime("%Y-%m-%d %H:%M:%S.%f"),
             "uuid": str(uuid.uuid4()),
             "ip": ip,
             "site_url": site_url,
@@ -198,7 +198,7 @@ async def generate_test_events_in_clickhouse(
     # Events generated for a different team
     events_from_other_team = generate_test_events(
         count=count_other_team,
-        team_id=team_id + random.randint(1, 1000),
+        team_id=team_id + secrets.SystemRandom().randint(1, 1000),
         possible_datetimes=possible_datetimes,
         event_name=event_name,
         properties=properties,

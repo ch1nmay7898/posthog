@@ -2,7 +2,6 @@ import datetime as dt
 import json
 import os
 import warnings
-from random import randint
 from uuid import uuid4
 
 import psycopg
@@ -32,6 +31,7 @@ from posthog.temporal.tests.utils.models import (
     adelete_batch_export,
     afetch_batch_export_runs,
 )
+import secrets
 
 REQUIRED_ENV_VARS = (
     "REDSHIFT_USER",
@@ -174,7 +174,7 @@ async def test_insert_into_redshift_activity_inserts_data_into_redshift_table(
 
     # Generate a random team id integer. There's still a chance of a collision,
     # but it's very small.
-    team_id = randint(1, 1000000)
+    team_id = secrets.SystemRandom().randint(1, 1000000)
 
     (events, _, _) = await generate_test_events_in_clickhouse(
         client=clickhouse_client,
