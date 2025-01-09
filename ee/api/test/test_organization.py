@@ -1,5 +1,4 @@
 import datetime as dt
-import random
 from unittest import mock
 from unittest.mock import ANY, call, patch
 
@@ -11,6 +10,7 @@ from ee.models.license import License
 from posthog.celery import sync_all_organization_available_features
 from posthog.models import Team, User
 from posthog.models.organization import Organization, OrganizationMembership
+import secrets
 
 
 class TestOrganizationEnterpriseAPI(APILicensedTest):
@@ -30,7 +30,7 @@ class TestOrganizationEnterpriseAPI(APILicensedTest):
         )
 
     def test_create_two_similarly_named_organizations(self):
-        random.seed(0)
+        secrets.SystemRandom().seed(0)
 
         response = self.client.post(
             "/api/organizations/",

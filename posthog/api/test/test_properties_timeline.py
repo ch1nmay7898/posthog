@@ -1,5 +1,4 @@
 import json
-import random
 import uuid
 from typing import Any, Dict, Literal, Optional
 
@@ -21,6 +20,7 @@ from posthog.test.base import (
     flush_persons_and_events,
     snapshot_clickhouse_queries,
 )
+import secrets
 
 
 def properties_timeline_test_factory(actor_type: Literal["person", "group"]):
@@ -64,7 +64,7 @@ def properties_timeline_test_factory(actor_type: Literal["person", "group"]):
                 team=self.team,
                 event=event,
                 timestamp=timestamp,
-                distinct_id=str(random.randint(1, 1000)),
+                distinct_id=str(secrets.SystemRandom().randint(1, 1000)),
                 **create_event_kwargs,
             )
 

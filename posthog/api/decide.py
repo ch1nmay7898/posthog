@@ -1,5 +1,4 @@
 import re
-from random import random
 from typing import Any, Dict, List, Optional, Union
 from urllib.parse import urlparse
 
@@ -31,6 +30,7 @@ from posthog.utils import (
     load_data_from_request,
 )
 from posthog.utils_cors import cors_response
+import secrets
 
 FLAG_EVALUATION_COUNTER = Counter(
     "flag_evaluation_total",
@@ -227,7 +227,7 @@ def get_decide(request: HttpRequest):
                     "*" in settings.NEW_ANALYTICS_CAPTURE_TEAM_IDS
                     or str(team.id) in settings.NEW_ANALYTICS_CAPTURE_TEAM_IDS
                 ):
-                    if random() < settings.NEW_ANALYTICS_CAPTURE_SAMPLING_RATE:
+                    if secrets.SystemRandom().random() < settings.NEW_ANALYTICS_CAPTURE_SAMPLING_RATE:
                         response["analytics"] = {"endpoint": settings.NEW_ANALYTICS_CAPTURE_ENDPOINT}
 
             if (
@@ -282,7 +282,7 @@ def get_decide(request: HttpRequest):
                 # Don't count if all requests are for survey targeting flags only.
                 if not all(flag.startswith(SURVEY_TARGETING_FLAG_PREFIX) for flag in feature_flags.keys()):
                     # Sample no. of decide requests with feature flags
-                    if settings.DECIDE_BILLING_SAMPLING_RATE and random() < settings.DECIDE_BILLING_SAMPLING_RATE:
+                    if settings.DECIDE_BILLING_SAMPLING_RATE and secrets.SystemRandom().random() < settings.DECIDE_BILLING_SAMPLING_RATE:
                         count = int(1 / settings.DECIDE_BILLING_SAMPLING_RATE)
                         increment_request_count(team.pk, count)
 

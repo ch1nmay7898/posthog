@@ -3,7 +3,6 @@ import datetime as dt
 import gzip
 import json
 import os
-import random
 import re
 import unittest.mock
 from collections import deque
@@ -39,6 +38,7 @@ from posthog.temporal.tests.utils.models import (
     adelete_batch_export,
     afetch_batch_export_runs,
 )
+import secrets
 
 pytestmark = [pytest.mark.asyncio, pytest.mark.django_db]
 
@@ -852,7 +852,7 @@ async def test_insert_into_snowflake_activity_inserts_data_into_snowflake_table(
     data_interval_start = dt.datetime(2023, 4, 20, 14, 0, 0, tzinfo=dt.timezone.utc)
     data_interval_end = dt.datetime(2023, 4, 25, 15, 0, 0, tzinfo=dt.timezone.utc)
 
-    team_id = random.randint(1, 1000000)
+    team_id = secrets.SystemRandom().randint(1, 1000000)
     (events, _, _) = await generate_test_events_in_clickhouse(
         client=clickhouse_client,
         team_id=team_id,

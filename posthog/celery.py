@@ -1,6 +1,5 @@
 import os
 import time
-from random import randrange
 from typing import Optional
 from uuid import UUID
 
@@ -29,6 +28,7 @@ from posthog.metrics import pushed_metrics_registry
 from posthog.ph_client import get_ph_client
 from posthog.redis import get_client
 from posthog.utils import get_crontab
+import secrets
 
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "posthog.settings")
@@ -287,11 +287,11 @@ def setup_periodic_tasks(sender: Celery, **kwargs):
 
     if settings.EE_AVAILABLE:
         sender.add_periodic_task(
-            crontab(hour="0", minute=str(randrange(0, 40))),
+            crontab(hour="0", minute=str(secrets.SystemRandom().randrange(0, 40))),
             clickhouse_send_license_usage.s(),
         )  # every day at a random minute past midnight. Randomize to avoid overloading license.posthog.com
         sender.add_periodic_task(
-            crontab(hour="4", minute=str(randrange(0, 40))),
+            crontab(hour="4", minute=str(secrets.SystemRandom().randrange(0, 40))),
             clickhouse_send_license_usage.s(),
         )  # again a few hours later just to make sure
 
@@ -312,7 +312,7 @@ def setup_periodic_tasks(sender: Celery, **kwargs):
 
         sender.add_periodic_task(crontab(hour="*", minute="55"), schedule_all_subscriptions.s())
         sender.add_periodic_task(
-            crontab(hour="2", minute=str(randrange(0, 40))),
+            crontab(hour="2", minute=str(secrets.SystemRandom().randrange(0, 40))),
             ee_persist_finished_recordings.s(),
         )
 
@@ -330,7 +330,7 @@ def setup_periodic_tasks(sender: Celery, **kwargs):
 
         sender.add_periodic_task(
             # once a day a random minute after midnight
-            crontab(hour="0", minute=str(randrange(0, 40))),
+            crontab(hour="0", minute=str(secrets.SystemRandom().randrange(0, 40))),
             delete_expired_exported_assets.s(),
             name="delete expired exported assets",
         )
