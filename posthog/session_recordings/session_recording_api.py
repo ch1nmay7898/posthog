@@ -423,7 +423,7 @@ class SessionRecordingViewSet(StructuredViewSetMixin, viewsets.GenericViewSet):
                 event_properties,
             )
 
-            with requests.get(url=url, stream=True) as r:
+            with requests.get(url=url, stream=True, timeout=60) as r:
                 r.raise_for_status()
                 response = HttpResponse(content=r.raw, content_type="application/json")
                 response["Content-Disposition"] = "inline"
