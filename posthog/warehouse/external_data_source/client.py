@@ -1,5 +1,6 @@
 import requests
 from django.conf import settings
+from security import safe_requests
 
 
 def send_request(path, method, params=None, payload=None):
@@ -10,7 +11,7 @@ def send_request(path, method, params=None, payload=None):
     headers = {"accept": "application/json", "content-type": "application/json", "Authorization": f"Bearer {token}"}
 
     if method == "GET":
-        response = requests.get(path, params=params, headers=headers)
+        response = safe_requests.get(path, params=params, headers=headers)
     elif method == "POST":
         response = requests.post(path, json=payload, headers=headers)
     elif method == "PATCH":

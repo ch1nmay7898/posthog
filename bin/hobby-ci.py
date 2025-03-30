@@ -10,7 +10,7 @@ import sys
 import time
 
 import digitalocean
-import requests
+from security import safe_requests
 
 letters = string.ascii_lowercase
 random_bit = "".join(random.choice(letters) for i in range(4))
@@ -102,7 +102,7 @@ class HobbyTester:
                 # verify is set False here because we are hitting the staging endoint for Let's Encrypt
                 # This endpoint doesn't have the strict rate limiting that the production endpoint has
                 # This mitigates the chances of getting throttled or banned
-                r = requests.get(url, verify=False)
+                r = safe_requests.get(url, verify=False)
             except Exception as e:
                 print(f"Host is probably not up. Received exception\n{e}")
                 time.sleep(retry_interval)

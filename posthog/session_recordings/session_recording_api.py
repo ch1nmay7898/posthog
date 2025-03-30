@@ -6,7 +6,6 @@ from typing import Any, List, Type, cast, Dict, Tuple
 from django.conf import settings
 
 import posthoganalytics
-import requests
 from django.contrib.auth.models import AnonymousUser
 from django.http import JsonResponse, HttpResponse
 from drf_spectacular.utils import extend_schema
@@ -51,6 +50,7 @@ from posthog.session_recordings.snapshots.convert_legacy_snapshots import (
 )
 from posthog.storage import object_storage
 from prometheus_client import Counter
+from security import safe_requests
 
 SNAPSHOT_SOURCE_REQUESTED = Counter(
     "session_snapshots_requested_counter",
@@ -423,7 +423,7 @@ class SessionRecordingViewSet(StructuredViewSetMixin, viewsets.GenericViewSet):
                 event_properties,
             )
 
-            with requests.get(url=url, stream=True) as r:
+            with safe_requests.get(url=url, stream=True) as r:
                 r.raise_for_status()
                 response = HttpResponse(content=r.raw, content_type="application/json")
                 response["Content-Disposition"] = "inline"
