@@ -2,7 +2,6 @@ import asyncio
 import dataclasses
 import datetime as dt
 import json
-import random
 import time
 import uuid
 
@@ -28,6 +27,7 @@ from posthog.temporal.common.logger import (
     bind_temporal_worker_logger,
     configure_logger,
 )
+import secrets
 
 pytestmark = pytest.mark.asyncio
 
@@ -214,13 +214,13 @@ BATCH_EXPORT_ID = str(uuid.uuid4())
             workflow_id=f"{BATCH_EXPORT_ID}-{dt.datetime.now(dt.timezone.utc)}",
             workflow_type="s3-export",
             workflow_run_id=str(uuid.uuid4()),
-            attempt=random.randint(1, 10000),
+            attempt=secrets.SystemRandom().randint(1, 10000),
         ),
         ActivityInfo(
             workflow_id=f"{BATCH_EXPORT_ID}-Backfill-{dt.datetime.now(dt.timezone.utc)}",
             workflow_type="backfill-batch-export",
             workflow_run_id=str(uuid.uuid4()),
-            attempt=random.randint(1, 10000),
+            attempt=secrets.SystemRandom().randint(1, 10000),
         ),
     ],
     indirect=True,
@@ -265,13 +265,13 @@ async def test_batch_exports_logger_binds_activity_context(
             workflow_id=f"{BATCH_EXPORT_ID}-{dt.datetime.now(dt.timezone.utc)}",
             workflow_type="s3-export",
             workflow_run_id=str(uuid.uuid4()),
-            attempt=random.randint(1, 10000),
+            attempt=secrets.SystemRandom().randint(1, 10000),
         ),
         ActivityInfo(
             workflow_id=f"{BATCH_EXPORT_ID}-Backfill-{dt.datetime.now(dt.timezone.utc)}",
             workflow_type="backfill-batch-export",
             workflow_run_id=str(uuid.uuid4()),
-            attempt=random.randint(1, 10000),
+            attempt=secrets.SystemRandom().randint(1, 10000),
         ),
     ],
     indirect=True,
@@ -327,13 +327,13 @@ def log_entries_table():
             workflow_id=f"{BATCH_EXPORT_ID}-{dt.datetime.now(dt.timezone.utc)}",
             workflow_type="s3-export",
             workflow_run_id=str(uuid.uuid4()),
-            attempt=random.randint(1, 10000),
+            attempt=secrets.SystemRandom().randint(1, 10000),
         ),
         ActivityInfo(
             workflow_id=f"{BATCH_EXPORT_ID}-Backfill-{dt.datetime.now(dt.timezone.utc)}",
             workflow_type="backfill-batch-export",
             workflow_run_id=str(uuid.uuid4()),
-            attempt=random.randint(1, 10000),
+            attempt=secrets.SystemRandom().randint(1, 10000),
         ),
     ],
     indirect=True,

@@ -11,8 +11,8 @@ from posthog.settings import get_from_env
 from posthog.settings.base_variables import TEST
 
 from dateutil import parser
-from random import random
 from datetime import timedelta
+import secrets
 
 
 def before_send(event, hint):
@@ -31,7 +31,7 @@ def before_send_transaction(event, hint):
     url_string = event.get("request", {}).get("url")
     if url_string and "decide" in url_string:
         DECIDE_SAMPLE_RATE = 0.00001  # 0.001%
-        should_sample = random() < DECIDE_SAMPLE_RATE
+        should_sample = secrets.SystemRandom().random() < DECIDE_SAMPLE_RATE
 
         transaction_start_time = event.get("start_timestamp")
         transaction_end_time = event.get("timestamp")
@@ -47,7 +47,7 @@ def before_send_transaction(event, hint):
                     return event
                 elif duration > timedelta(seconds=2):
                     # very high sample rate for transactions that took more than 2 seconds
-                    return event if random() < 0.5 else None
+                    return event if secrets.SystemRandom().random() < 0.5 else None
 
             except Exception:
                 return event if should_sample else None

@@ -1,4 +1,3 @@
-import random
 
 from dateutil.relativedelta import relativedelta
 from django.utils.timezone import now
@@ -16,6 +15,7 @@ from posthog.models import (
 )
 
 from .data_generator import DataGenerator
+import secrets
 
 SCREEN_OPTIONS = ("settings", "profile", "movies", "downloads")
 
@@ -72,7 +72,7 @@ class AppDataGenerator(DataGenerator):
         dashboard.save()  # to update the insight's filter hash
 
     def populate_person_events(self, person: Person, distinct_id: str, _index: int):
-        start_day = random.randint(1, self.n_days)
+        start_day = secrets.SystemRandom().randint(1, self.n_days)
         self.add_event(
             event="$pageview",
             distinct_id=distinct_id,
@@ -84,29 +84,29 @@ class AppDataGenerator(DataGenerator):
             timestamp=now() - relativedelta(days=start_day),
         )
 
-        if random.randint(0, 10) <= 9:
+        if secrets.SystemRandom().randint(0, 10) <= 9:
             self.add_event(
                 event="watched_movie",
                 distinct_id=distinct_id,
                 timestamp=now() - relativedelta(days=start_day) + relativedelta(seconds=100),
-                properties={"is_first_movie": random.choice([True, False])},
+                properties={"is_first_movie": secrets.choice([True, False])},
             )
             self.add_event(
                 event="$pageview",
                 distinct_id=distinct_id,
                 timestamp=now() - relativedelta(days=start_day) + relativedelta(seconds=15),
-                properties={"$current_url": "https://hogflix/" + random.choice(SCREEN_OPTIONS)},
+                properties={"$current_url": "https://hogflix/" + secrets.choice(SCREEN_OPTIONS)},
             )
-            if random.randint(0, 10) <= 8:
+            if secrets.SystemRandom().randint(0, 10) <= 8:
                 self.add_event(
                     event="$pageview",
                     distinct_id=distinct_id,
                     timestamp=now() - relativedelta(days=start_day) + relativedelta(seconds=30),
-                    properties={"$current_url": "https://hogflix/" + random.choice(SCREEN_OPTIONS)},
+                    properties={"$current_url": "https://hogflix/" + secrets.choice(SCREEN_OPTIONS)},
                 )
                 self.add_event(
                     event="rated_app",
                     distinct_id=distinct_id,
                     timestamp=now() - relativedelta(days=start_day) + relativedelta(seconds=45),
-                    properties={"app_rating": random.randint(1, 5)},
+                    properties={"app_rating": secrets.SystemRandom().randint(1, 5)},
                 )

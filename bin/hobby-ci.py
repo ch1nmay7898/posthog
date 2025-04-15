@@ -2,7 +2,6 @@
 
 import datetime
 import os
-import random
 import re
 import signal
 import string
@@ -11,9 +10,10 @@ import time
 
 import digitalocean
 import requests
+import secrets
 
 letters = string.ascii_lowercase
-random_bit = "".join(random.choice(letters) for i in range(4))
+random_bit = "".join(secrets.choice(letters) for i in range(4))
 name = f"do-ci-hobby-deploy-{random_bit}"
 region = "sfo3"
 image = "ubuntu-22-04-x64"
