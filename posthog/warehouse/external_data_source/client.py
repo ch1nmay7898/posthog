@@ -10,13 +10,13 @@ def send_request(path, method, params=None, payload=None):
     headers = {"accept": "application/json", "content-type": "application/json", "Authorization": f"Bearer {token}"}
 
     if method == "GET":
-        response = requests.get(path, params=params, headers=headers)
+        response = requests.get(path, params=params, headers=headers, timeout=60)
     elif method == "POST":
-        response = requests.post(path, json=payload, headers=headers)
+        response = requests.post(path, json=payload, headers=headers, timeout=60)
     elif method == "PATCH":
-        response = requests.patch(path, json=payload, headers=headers)
+        response = requests.patch(path, json=payload, headers=headers, timeout=60)
     elif method == "DELETE":
-        response = requests.delete(path, headers=headers)
+        response = requests.delete(path, headers=headers, timeout=60)
         return
     else:
         raise ValueError(f"Invalid method: {method}")
