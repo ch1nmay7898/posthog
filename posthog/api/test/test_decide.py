@@ -1,6 +1,5 @@
 import base64
 import json
-import random
 import time
 from unittest.mock import patch
 
@@ -38,6 +37,7 @@ from posthog.models.team.team import Team
 from posthog.models.user import User
 from posthog.models.utils import generate_random_token_personal
 from posthog.test.base import BaseTest, QueryMatchingTest, snapshot_postgres_queries, snapshot_postgres_queries_context
+import secrets
 
 
 @patch(
@@ -2775,7 +2775,7 @@ class TestDecide(BaseTest, QueryMatchingTest):
 
     @patch("posthog.models.feature_flag.flag_analytics.CACHE_BUCKET_SIZE", 10)
     def test_decide_analytics_samples_appropriately(self, *args):
-        random.seed(12345)
+        secrets.SystemRandom().seed(12345)
         FeatureFlag.objects.create(
             team=self.team,
             rollout_percentage=50,
@@ -2799,7 +2799,7 @@ class TestDecide(BaseTest, QueryMatchingTest):
 
     @patch("posthog.models.feature_flag.flag_analytics.CACHE_BUCKET_SIZE", 10)
     def test_decide_analytics_samples_appropriately_with_small_sample_rate(self, *args):
-        random.seed(12345)
+        secrets.SystemRandom().seed(12345)
         FeatureFlag.objects.create(
             team=self.team,
             rollout_percentage=50,
@@ -2823,7 +2823,7 @@ class TestDecide(BaseTest, QueryMatchingTest):
 
     @patch("posthog.models.feature_flag.flag_analytics.CACHE_BUCKET_SIZE", 10)
     def test_decide_analytics_samples_dont_break_with_zero_sampling(self, *args):
-        random.seed(12345)
+        secrets.SystemRandom().seed(12345)
         FeatureFlag.objects.create(
             team=self.team,
             rollout_percentage=50,
@@ -3227,11 +3227,11 @@ class TestDecideUsesReadReplica(TransactionTestCase):
 
     def setup_user_and_team_in_db(self, dbname: str = "default"):
         organization = Organization.objects.using(dbname).create(
-            name="Org 1", slug=f"org-{dbname}-{random.randint(1, 1000000)}"
+            name="Org 1", slug=f"org-{dbname}-{secrets.SystemRandom().randint(1, 1000000)}"
         )
         team = Team.objects.using(dbname).create(organization=organization, name="Team 1 org 1")
         user = User.objects.using(dbname).create(
-            email=f"test-{random.randint(1, 100000)}@posthog.com",
+            email=f"test-{secrets.SystemRandom().randint(1, 100000)}@posthog.com",
             password="password",
             first_name="first_name",
         )

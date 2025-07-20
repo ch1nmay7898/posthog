@@ -1,4 +1,3 @@
-import random
 import string
 
 from dateutil import parser
@@ -6,6 +5,7 @@ from dateutil import parser
 from posthog.models import Dashboard, DashboardTile, Insight, Tag
 from posthog.models.activity_logging.activity_log import Change, changes_between
 from posthog.test.base import BaseTest
+import secrets
 
 
 class TestChangesBetweenInsights(BaseTest):
@@ -126,7 +126,7 @@ class TestChangesBetweenInsights(BaseTest):
             is_sample=kwargs.get("is_sample", False),
             short_id=kwargs.get(
                 "short_id",
-                "".join(random.choices(string.ascii_letters + string.digits, k=6)),
+                "".join(secrets.SystemRandom().choices(string.ascii_letters + string.digits, k=6)),
             ),
             favorited=kwargs.get("favorited", False),
             refresh_attempt=kwargs.get("refresh_attempt", 0),

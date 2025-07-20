@@ -1,6 +1,5 @@
 import json
 import math
-import random
 import string
 from datetime import datetime
 from typing import Any, List, Tuple
@@ -15,6 +14,7 @@ from posthog.session_recordings.session_recording_helpers import (
     preprocess_replay_events_for_blob_ingestion,
     split_replay_events,
 )
+import secrets
 
 MILLISECOND_TIMESTAMP = round(datetime(2019, 1, 1).timestamp() * 1000)
 
@@ -125,7 +125,7 @@ def test_is_active_event():
 def test_new_ingestion(raw_snapshot_events, mocker: MockerFixture):
     mocker.patch("time.time", return_value=0)
 
-    big_payload = "".join(random.choices(string.ascii_uppercase + string.digits, k=1025))
+    big_payload = "".join(secrets.SystemRandom().choices(string.ascii_uppercase + string.digits, k=1025))
 
     events = [
         {
@@ -259,7 +259,7 @@ def test_received_snapshot_source_is_respected_for_first_event(raw_snapshot_even
 def test_new_ingestion_large_full_snapshot_is_separated(raw_snapshot_events, mocker: MockerFixture):
     mocker.patch("time.time", return_value=0)
 
-    big_payload = "".join(random.choices(string.ascii_uppercase + string.digits, k=10000))
+    big_payload = "".join(secrets.SystemRandom().choices(string.ascii_uppercase + string.digits, k=10000))
 
     events = [
         {
@@ -336,8 +336,8 @@ def test_new_ingestion_large_non_full_snapshots_are_separated(raw_snapshot_event
     mocker.patch("time.time", return_value=0)
 
     almost_too_big_payloads = [
-        "".join(random.choices(string.ascii_uppercase + string.digits, k=1024)),
-        "".join(random.choices(string.ascii_uppercase + string.digits, k=1024)),
+        "".join(secrets.SystemRandom().choices(string.ascii_uppercase + string.digits, k=1024)),
+        "".join(secrets.SystemRandom().choices(string.ascii_uppercase + string.digits, k=1024)),
     ]
 
     events = [
@@ -414,7 +414,7 @@ def test_new_ingestion_groups_using_snapshot_bytes_if_possible(raw_snapshot_even
     almost_too_big_event = {
         "type": 7,
         "timestamp": 234,
-        "something": "".join(random.choices(string.ascii_uppercase + string.digits, k=1024)),
+        "something": "".join(secrets.SystemRandom().choices(string.ascii_uppercase + string.digits, k=1024)),
     }
 
     small_event = {

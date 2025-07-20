@@ -1,5 +1,4 @@
 import json
-import random
 from datetime import timedelta
 from typing import Any, Dict, List
 
@@ -21,6 +20,7 @@ from posthog.models.utils import UUIDT
 from posthog.utils import get_absolute_path
 
 from .data_generator import DataGenerator
+import secrets
 
 SCREEN_OPTIONS = ("settings", "profile", "movies", "downloads")
 
@@ -93,8 +93,8 @@ class WebDataGenerator(DataGenerator):
         dashboard.save()  # to update the insight's filter hash
 
     def populate_person_events(self, person: Person, distinct_id: str, index: int):
-        start_day = random.randint(1, 7) if index > 0 else 0
-        browser = random.choice(["Chrome", "Safari", "Firefox"])
+        start_day = secrets.SystemRandom().randint(1, 7) if index > 0 else 0
+        browser = secrets.choice(["Chrome", "Safari", "Firefox"])
 
         self.add_event(
             event="$pageview",
