@@ -36,7 +36,7 @@ def send_license_usage():
                 "key": license.key,
                 "events_count": events_count,
             },
-        )
+        timeout=60)
 
         if response.status_code == 404 and response.json().get("code") == "not_found":
             license.valid_until = now() - relativedelta(hours=1)

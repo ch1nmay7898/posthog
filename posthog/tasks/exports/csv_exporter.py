@@ -275,7 +275,7 @@ def make_api_call(
             url=url,
             json=body,
             headers={"Authorization": f"Bearer {access_token}"},
-        )
+        timeout=60)
         return response
     except Exception as ex:
         logger.error(
